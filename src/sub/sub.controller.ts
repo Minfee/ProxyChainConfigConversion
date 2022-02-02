@@ -7,18 +7,16 @@ export class SubController {
 
   @Get('getSub')
   async getHello(
-    @Query('subUrl') subUrl: string,
+    @Query('subConfig') subConfig: string,
     @Query('type') type: string,
     @Query('conversionServer') conversionServer: string,
-    @Query('proxyChain') proxyChain?: string,
     @Query('proxyChainMap')
     proxyChainMap?: string,
   ): Promise<any> {
     return await this.appService.getSub(
-      subUrl,
+      subConfig,
       type,
       conversionServer,
-      proxyChain,
       proxyChainMap,
     );
   }

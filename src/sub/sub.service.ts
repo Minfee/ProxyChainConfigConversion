@@ -71,19 +71,16 @@ export class SubService {
   }
 
   async getSub(
-    subUrl: string,
+    subConfig: string,
     type: string,
     conversionServer: string,
-    proxyChain?: string,
     proxyChainMap?: string,
   ): Promise<any> {
     const config = encodeURIComponent(
       'https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Full_AdblockPlus.ini',
     );
     const target = this.getTarget(type);
-    const proxyLink = encodeURIComponent(
-      proxyChain ? proxyChain + '|' + subUrl : subUrl,
-    );
+    const proxyLink = encodeURIComponent(subConfig);
 
     return await axios
       .get(
