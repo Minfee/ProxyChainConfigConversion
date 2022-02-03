@@ -14,7 +14,11 @@ export class SubService {
     }
   }
 
-  surgeProcessing(data: string, proxyChainMap?: string) {
+  surgeProcessing(
+    data: string,
+    conversionServer: string,
+    proxyChainMap?: string,
+  ) {
     try {
       const proxyChainMapParse = JSON.parse(proxyChainMap);
       const groupPattern = /\[Proxy\][\s\S]*(?=\[Proxy Group\])/g;
@@ -34,7 +38,11 @@ export class SubService {
         return match;
       });
     } catch (error) {}
-
+    const refreshConfigPattern = /#!MANAGED-CONFIG +.+(?=\?)/g;
+    data = data.replace(
+      refreshConfigPattern,
+      `#!MANAGED-CONFIG ${conversionServer}`,
+    );
     return data;
   }
 
@@ -59,10 +67,15 @@ export class SubService {
     return data;
   }
 
-  processing(type: string, data: string, proxyChainMap?: string) {
+  processing(
+    type: string,
+    data: string,
+    conversionServer: string,
+    proxyChainMap?: string,
+  ) {
     switch (type) {
       case 'surge4':
-        return this.surgeProcessing(data, proxyChainMap);
+        return this.surgeProcessing(data, conversionServer, proxyChainMap);
       case 'clash':
         return this.clashProcessing(data, proxyChainMap);
       default:
@@ -87,7 +100,7 @@ export class SubService {
         `${conversionServer}?target=${target}&url=${proxyLink}&insert=true&config=${config}&filename=minfee&emoji=true&list=false&tfo=false&scv=false&fdn=false&sort=false&udp=true`,
       )
       .then((r) => {
-        return this.processing(type, r.data, proxyChainMap);
+        return this.processing(type, r.data, conversionServer, proxyChainMap);
       });
   }
 }
